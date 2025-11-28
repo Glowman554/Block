@@ -111,7 +111,7 @@ public class MainGame extends ApplicationAdapter {
         Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 
         modelBatch.begin(camera);
-        world.render(modelBatch, environment);
+        world.render(modelBatch, environment, camera);
         modelBatch.end();
 
         float corsairX = (Gdx.graphics.getWidth() - corsairSize) / 2f;

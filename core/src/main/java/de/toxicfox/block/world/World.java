@@ -1,5 +1,6 @@
 package de.toxicfox.block.world;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -227,9 +228,9 @@ public class World implements DebugOverlay.DataProvider {
         }
     }
 
-    public void render(ModelBatch batch, Environment environment) {
+    public void render(ModelBatch batch, Environment environment, Camera camera) {
         for (Chunk chunk : loadedChunks) {
-            chunk.render(batch, environment);
+            chunk.render(batch, environment, camera);
         }
     }
 

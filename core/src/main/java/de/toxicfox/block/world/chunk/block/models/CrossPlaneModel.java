@@ -13,16 +13,10 @@ import de.toxicfox.block.world.chunk.block.BlockModel;
 public class CrossPlaneModel extends BlockModel {
 
     private TextureRegion texture;
-    private Material material;
 
 
     @Override
     public void addVisibleFaces(Chunk chunk, MeshPartBuilder mb, Block b, int x, int y, int z, int attr) {
-        if (material == null) {
-            material = new Material(TextureAttribute.createDiffuse(texture));
-        }
-
-
         rectWithUV(mb,
             x, y, z,
             x, y + 1, z,

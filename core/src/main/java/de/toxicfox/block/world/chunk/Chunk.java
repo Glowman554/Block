@@ -1,5 +1,6 @@
 package de.toxicfox.block.world.chunk;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -11,7 +12,10 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
 import de.toxicfox.block.texture.DynamicAtlas;
 import de.toxicfox.block.world.chunk.block.Block;
+import de.toxicfox.block.world.chunk.block.BlockTags;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
+
+import java.util.ArrayList;
 
 public class Chunk {
     public static final int SIZE = 8;
@@ -24,7 +28,12 @@ public class Chunk {
     private final Vector3 position = new Vector3();
     private Model model;
     private ModelInstance instance;
+    private Model transparentModel;
+    private ModelInstance transparentInstance;
     private boolean rebuildNeeded = false;
+
+    private final ArrayList<BlockData> transparentBlocks = new ArrayList<>();
+
 
     public Chunk(ChunkStore store, ChunkGenerator generator, int chunkX, int worldZ) {
         this.chunkX = chunkX;
@@ -57,39 +66,6 @@ public class Chunk {
         }
     }
 
-    private void build() {
-        if (model != null) {
-            model.dispose();
-        }
-
-        int attr = VertexAttributes.Usage.Position |
-            VertexAttributes.Usage.Normal |
-            VertexAttributes.Usage.TextureCoordinates;
-
-        ModelBuilder mb = new ModelBuilder();
-        mb.begin();
-        MeshPartBuilder mpb = mb.part("chunk", GL20.GL_TRIANGLES, attr, DynamicAtlas.BLOCK_ATLAS.getAtlasMaterial());
-
-
-        for (int x = 0; x < SIZE; x++) {
-            for (int y = 0; y < HEIGHT; y++) {
-                for (int z = 0; z < SIZE; z++) {
-                    Block b = blocks[x][y][z];
-
-                    if (b == null) {
-                        continue;
-                    }
-
-                    b.getModel().addVisibleFaces(this, mpb, b, x, y, z, attr);
-                }
-            }
-        }
-
-        model = mb.end();
-        instance = new ModelInstance(model);
-        instance.transform.setToTranslation(position);
-    }
-
     public Block adj(int x, int y, int z, int dx, int dy, int dz) {
         int nx = x + dx;
         int ny = y + dy;
@@ -115,14 +91,102 @@ public class Chunk {
         rebuildNeeded = true;
     }
 
-    public void render(ModelBatch batch, Environment env) {
+
+    private void buildOpaqueAndStoreTransparent() {
+        if (model != null) {
+            model.dispose();
+        }
+
+        int attr = VertexAttributes.Usage.Position |
+            VertexAttributes.Usage.Normal |
+            VertexAttributes.Usage.TextureCoordinates;
+
+        ModelBuilder mb = new ModelBuilder();
+        mb.begin();
+        MeshPartBuilder mpb = mb.part("chunk", GL20.GL_TRIANGLES, attr, DynamicAtlas.BLOCK_ATLAS.getAtlasMaterial());
+
+        transparentBlocks.clear();
+
+        for (int x = 0; x < SIZE; x++) {
+            for (int y = 0; y < HEIGHT; y++) {
+                for (int z = 0; z < SIZE; z++) {
+                    Block b = blocks[x][y][z];
+                    if (b == null) continue;
+
+                    if (b.hasTag(BlockTags.TRANSPARENT)) {
+                        transparentBlocks.add(new BlockData(b, x, y, z));
+                    } else {
+                        b.getModel().addVisibleFaces(this, mpb, b, x, y, z, attr);
+                    }
+                }
+            }
+        }
+
+        model = mb.end();
+        instance = new ModelInstance(model);
+        instance.transform.setToTranslation(position);
+    }
+
+    private void buildTransparentModel(Camera camera) {
+        if (transparentModel != null) {
+            transparentModel.dispose();
+        }
+
+        int attr = VertexAttributes.Usage.Position |
+            VertexAttributes.Usage.Normal |
+            VertexAttributes.Usage.TextureCoordinates;
+
+        // Sort transparent blocks by camera distance
+        transparentBlocks.sort((a, b) -> {
+            float distA = camera.position.dst2(a.getWorldPosition(position));
+            float distB = camera.position.dst2(b.getWorldPosition(position));
+            return Float.compare(distB, distA);
+        });
+
+        ModelBuilder mb = new ModelBuilder();
+        mb.begin();
+        MeshPartBuilder mpbTransparent = mb.part("chunkTransparent", GL20.GL_TRIANGLES, attr, DynamicAtlas.BLOCK_ATLAS.getAtlasMaterial());
+
+        for (BlockData bd : transparentBlocks) {
+            bd.block.getModel().addVisibleFaces(this, mpbTransparent, bd.block, bd.x, bd.y, bd.z, attr);
+        }
+
+        transparentModel = mb.end();
+        transparentInstance = new ModelInstance(transparentModel);
+        transparentInstance.transform.setToTranslation(position);
+    }
+
+    public void render(ModelBatch batch, Environment env, Camera camera) {
         if (rebuildNeeded) {
-            build();
+            buildOpaqueAndStoreTransparent();
             rebuildNeeded = false;
         }
 
+        buildTransparentModel(camera);
+
         if (instance != null) {
             batch.render(instance, env);
+        }
+
+        if (transparentInstance != null) {
+            batch.render(transparentInstance, env);
+        }
+    }
+
+    // Helper class
+    private static class BlockData {
+        final Block block;
+        final int x, y, z;
+
+        BlockData(Block block, int x, int y, int z) {
+            this.block = block;
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        Vector3 getWorldPosition(Vector3 chunkPos) {
+            return new Vector3(chunkPos.x + x, chunkPos.y + y, chunkPos.z + z);
         }
     }
 
@@ -131,6 +195,10 @@ public class Chunk {
 
         if (model != null) {
             model.dispose();
+        }
+
+        if (transparentModel != null) {
+            transparentModel.dispose();
         }
     }
 }

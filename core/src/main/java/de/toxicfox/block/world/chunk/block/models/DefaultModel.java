@@ -19,31 +19,24 @@ public class DefaultModel extends BlockModel {
     private TextureRegion top;
     private TextureRegion bottom;
 
-    private Material frontMaterial;
-    private Material backMaterial;
-    private Material leftMaterial;
-    private Material rightMaterial;
-    private Material topMaterial;
-    private Material bottomMaterial;
+    private boolean shouldAddFace(Block self, Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
+        Block neighbor = chunk.adj(x, y, z, dx, dy, dz);
 
-    private boolean shouldAddFace(Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
-        Block b = chunk.adj(x, y, z, dx, dy, dz);
-        return b == null || !b.hasTag(BlockTags.FULL_BLOCK);
+        if (neighbor == null) {
+            return true;
+        }
+
+        if (self.hasTag(BlockTags.TRANSPARENT) && neighbor.hasTag(BlockTags.TRANSPARENT)) {
+            return false;
+        }
+
+        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
     }
+
 
     @Override
     public void addVisibleFaces(Chunk chunk, MeshPartBuilder mb, Block b, int x, int y, int z, int attr) {
-        if (frontMaterial == null) {
-            frontMaterial = new Material(TextureAttribute.createDiffuse(front));
-            backMaterial = new Material(TextureAttribute.createDiffuse(back));
-            leftMaterial = new Material(TextureAttribute.createDiffuse(left));
-            rightMaterial = new Material(TextureAttribute.createDiffuse(right));
-            topMaterial = new Material(TextureAttribute.createDiffuse(top));
-            bottomMaterial = new Material(TextureAttribute.createDiffuse(bottom));
-        }
-
-
-        if (shouldAddFace(chunk, x, y, z, 0, 0, -1)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, 0, -1)) {
             rectWithUV(mb,
                 x, y, z,     // BL
                 x, y + 1, z,     // TL
@@ -54,7 +47,7 @@ public class DefaultModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(chunk, x, y, z, 0, 0, 1)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, 0, 1)) {
             rectWithUV(mb,
                 x, y + 1, z + 1,
                 x, y, z + 1,
@@ -65,7 +58,7 @@ public class DefaultModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(chunk, x, y, z, 0, -1, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, -1, 0)) {
             rectWithUV(mb,
                 x, y, z + 1,
                 x, y, z,
@@ -76,7 +69,7 @@ public class DefaultModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(chunk, x, y, z, 0, 1, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, 1, 0)) {
             rectWithUV(mb,
                 x, y + 1, z,
                 x, y + 1, z + 1,
@@ -87,7 +80,7 @@ public class DefaultModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(chunk, x, y, z, -1, 0, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, -1, 0, 0)) {
             rectWithUV(mb,
                 x, y, z + 1,
                 x, y + 1, z + 1,
@@ -98,7 +91,7 @@ public class DefaultModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(chunk, x, y, z, 1, 0, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, 1, 0, 0)) {
             rectWithUV(mb,
                 x + 1, y, z,
                 x + 1, y + 1, z,

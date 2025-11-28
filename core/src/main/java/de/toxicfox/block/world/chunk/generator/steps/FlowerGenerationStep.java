@@ -14,7 +14,7 @@ public class FlowerGenerationStep implements GenerationStep {
             for (int z = 0; z < Chunk.SIZE; z++) {
                 if (generator.flowerNoise.noise(x + offsetX, z + offsetZ) > 0.6) {
                     int height = heightMap.get(x, z);
-                    if (chunk.get(x, height, z) != null && chunk.get(x, height, z).hasTag(BlockTags.FULL_BLOCK)) {
+                    if (chunk.get(x, height, z) != null && chunk.get(x, height, z) == Block.GRASS) {
                         chunk.set(x, height + 1, z, Block.FLOWER);
                     }
                 }
