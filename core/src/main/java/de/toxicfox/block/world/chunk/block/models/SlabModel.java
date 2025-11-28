@@ -60,7 +60,7 @@ public class SlabModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(b, chunk, x, y, z, 0, -1, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, -1, 0) || type == UPPER) {
             rectWithUV(mb,
                 x, y + y1, z + 1,
                 x, y + y1, z,
@@ -71,7 +71,7 @@ public class SlabModel extends BlockModel {
             );
         }
 
-        if (shouldAddFace(b, chunk, x, y, z, 0, 1, 0)) {
+        if (shouldAddFace(b, chunk, x, y, z, 0, 1, 0) || type == LOWER) {
             rectWithUV(mb,
                 x, y + y2, z,
                 x, y + y2, z + 1,
