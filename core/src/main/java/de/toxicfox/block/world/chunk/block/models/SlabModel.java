@@ -1,5 +1,6 @@
 package de.toxicfox.block.world.chunk.block.models;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import de.toxicfox.block.texture.DynamicAtlas;
@@ -11,24 +12,12 @@ import de.toxicfox.block.world.chunk.block.BlockTags;
 public class SlabModel extends BlockModel {
 
     private TextureRegion texture;
+    private TextureRegion textureTop;
+    private TextureRegion textureBottom;
 
     public static final byte UPPER = 0;
     public static final byte LOWER = 1;
     public static final byte FULL = 2;
-
-    private boolean shouldAddFace(Block self, Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
-        Block neighbor = chunk.adj(x, y, z, dx, dy, dz);
-
-        if (neighbor == null) {
-            return true;
-        }
-
-        if (self.hasTag(BlockTags.TRANSPARENT) && neighbor.hasTag(BlockTags.TRANSPARENT)) {
-            return false;
-        }
-
-        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
-    }
 
     @Override
     public void addVisibleFaces(Chunk chunk, MeshPartBuilder mb, Block b, int x, int y, int z, int attr) {
@@ -36,13 +25,16 @@ public class SlabModel extends BlockModel {
 
         float y1 = 0f;
         float y2 = 0f;
+        TextureRegion current = texture;
 
         if (type == UPPER) {
             y1 = 0.5f;
             y2 = 1f;
+            current = textureTop;
         } else if (type == LOWER) {
             y1 = 0f;
             y2 = 0.5f;
+            current = textureBottom;
         } else if (type == FULL) {
             y1 = 0f;
             y2 = 1f;
@@ -55,7 +47,7 @@ public class SlabModel extends BlockModel {
                 x + 1, y + y2, z, // TR
                 x + 1, y + y1, z, // BR
                 0, 0, -1,
-                texture
+                current
             );
         }
 
@@ -66,7 +58,7 @@ public class SlabModel extends BlockModel {
                 x + 1, y + y1, z + 1,
                 x + 1, y + y2, z + 1,
                 0, 0, 1,
-                texture
+                current
             );
         }
 
@@ -99,7 +91,7 @@ public class SlabModel extends BlockModel {
                 x, y + y2, z,
                 x, y + y1, z,
                 -1, 0, 0,
-                texture
+                current
             );
         }
 
@@ -110,7 +102,7 @@ public class SlabModel extends BlockModel {
                 x + 1, y + y2, z + 1,
                 x + 1, y + y1, z + 1,
                 1, 0, 0,
-                texture
+                current
             );
         }
     }
@@ -121,6 +113,8 @@ public class SlabModel extends BlockModel {
     @Override
     public void initialize(String id) {
         texture = DynamicAtlas.BLOCK_ATLAS.addTexture(load("texture/" + id + ".png"), true);
+        textureTop = subRegion(texture, 0f, 0f, 0.5f, 1f);
+        textureBottom = subRegion(texture, 0.5f, 0f, 1f, 1f);
     }
 
     @Override

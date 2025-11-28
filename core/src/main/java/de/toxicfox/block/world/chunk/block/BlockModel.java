@@ -37,5 +37,31 @@ public abstract class BlockModel {
         mb.rect(v1, v2, v3, v4);
     }
 
+    protected TextureRegion subRegion(TextureRegion region, float x0, float y0, float x1, float y1) {
+        int width = region.getRegionWidth();
+        int height = region.getRegionHeight();
+
+        int subX = (int)(x0 * width);
+        int subY = (int)(y0 * height);
+        int subWidth = (int)((x1 - x0) * width);
+        int subHeight = (int)((y1 - y0) * height);
+
+        return new TextureRegion(region, subX, subY, subWidth, subHeight);
+    }
+
+    protected boolean shouldAddFace(Block self, Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
+        Block neighbor = chunk.adj(x, y, z, dx, dy, dz);
+
+        if (neighbor == null) {
+            return true;
+        }
+
+        if (self.hasTag(BlockTags.TRANSPARENT) && neighbor.hasTag(BlockTags.TRANSPARENT)) {
+            return false;
+        }
+
+        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
+    }
+
     public abstract void dispose();
 }

@@ -12,20 +12,6 @@ import de.toxicfox.block.world.chunk.block.BlockTags;
 public class WaterModel extends BlockModel {
     private TextureRegion texture;
 
-    private boolean shouldAddFace(Block self, Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
-        Block neighbor = chunk.adj(x, y, z, dx, dy, dz);
-
-        if (neighbor == null) {
-            return true;
-        }
-
-        if (self.hasTag(BlockTags.TRANSPARENT) && neighbor.hasTag(BlockTags.TRANSPARENT)) {
-            return false;
-        }
-
-        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
-    }
-
     @Override
     public void addVisibleFaces(Chunk chunk, MeshPartBuilder mb, Block b, int x, int y, int z, int attr) {
         float top = y + 0.9f;

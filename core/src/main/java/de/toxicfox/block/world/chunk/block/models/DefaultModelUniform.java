@@ -14,20 +14,6 @@ import de.toxicfox.block.world.chunk.block.BlockTags;
 public class DefaultModelUniform extends BlockModel {
     private TextureRegion texture;
 
-    private boolean shouldAddFace(Block self, Chunk chunk, int x, int y, int z, int dx, int dy, int dz) {
-        Block neighbor = chunk.adj(x, y, z, dx, dy, dz);
-
-        if (neighbor == null) {
-            return true;
-        }
-
-        if (self.hasTag(BlockTags.TRANSPARENT) && neighbor.hasTag(BlockTags.TRANSPARENT)) {
-            return false;
-        }
-
-        return !neighbor.hasTag(BlockTags.FULL_BLOCK) ||  neighbor.hasTag(BlockTags.TRANSPARENT);
-    }
-
     @Override
     public void addVisibleFaces(Chunk chunk, MeshPartBuilder mb, Block b, int x, int y, int z, int attr) {
         if (shouldAddFace(b, chunk, x, y, z, 0, 0, -1)) {
