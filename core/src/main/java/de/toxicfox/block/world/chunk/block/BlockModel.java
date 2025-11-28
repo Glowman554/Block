@@ -60,7 +60,7 @@ public abstract class BlockModel {
             return false;
         }
 
-        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
+        return !neighbor.hasTag(BlockTags.FULL_BLOCK) || neighbor.hasTag(BlockTags.TRANSPARENT);
     }
 
     public abstract void dispose();

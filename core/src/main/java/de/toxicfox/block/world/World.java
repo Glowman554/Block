@@ -46,11 +46,16 @@ public class World implements DebugOverlay.DataProvider {
         return null;
     }
 
-    public Block getBlock(int worldX, int worldY, int worldZ) {
+    private Chunk getChunkByWorld(int worldX, int worldZ) {
         int chunkX = (int) Math.floor((double) worldX / Chunk.SIZE);
         int chunkZ = (int) Math.floor((double) worldZ / Chunk.SIZE);
 
-        Chunk chunk = getChunk(chunkX, chunkZ);
+        return getChunk(chunkX, chunkZ);
+    }
+
+
+    public Block getBlock(int worldX, int worldY, int worldZ) {
+        Chunk chunk = getChunkByWorld(worldX, worldZ);
         if (chunk == null) {
             return null;
         }
@@ -61,19 +66,8 @@ public class World implements DebugOverlay.DataProvider {
         return chunk.get(localX, worldY, localZ);
     }
 
-    public boolean isBlock(int worldX, int worldY, int worldZ) {
-        return getBlock(worldX, worldY, worldZ) != null;
-    }
-
     public void setBlock(int worldX, int worldY, int worldZ, Block block) {
-        setBlock(worldX, worldY, worldZ, block, (byte) 0);
-    }
-
-    public void setBlock(int worldX, int worldY, int worldZ, Block block, byte data) {
-        int chunkX = (int) Math.floor((double) worldX / Chunk.SIZE);
-        int chunkZ = (int) Math.floor((double) worldZ / Chunk.SIZE);
-
-        Chunk chunk = getChunk(chunkX, chunkZ);
+        Chunk chunk = getChunkByWorld(worldX, worldZ);
         if (chunk == null) {
             return;
         }
@@ -82,9 +76,39 @@ public class World implements DebugOverlay.DataProvider {
         int localZ = Math.floorMod(worldZ, Chunk.SIZE);
 
         chunk.set(localX, worldY, localZ, block);
+        chunk.rebuild();
+    }
+
+
+    public boolean isBlock(int worldX, int worldY, int worldZ) {
+        return getBlock(worldX, worldY, worldZ) != null;
+    }
+
+    public byte getBlockData(int worldX, int worldY, int worldZ) {
+        Chunk chunk = getChunkByWorld(worldX, worldZ);
+        if (chunk == null) {
+            return 0;
+        }
+
+        int localX = Math.floorMod(worldX, Chunk.SIZE);
+        int localZ = Math.floorMod(worldZ, Chunk.SIZE);
+
+        return chunk.getData(localX, worldY, localZ);
+    }
+
+    public void setBlockData(int worldX, int worldY, int worldZ, byte data) {
+        Chunk chunk = getChunkByWorld(worldX, worldZ);
+        if (chunk == null) {
+            return;
+        }
+
+        int localX = Math.floorMod(worldX, Chunk.SIZE);
+        int localZ = Math.floorMod(worldZ, Chunk.SIZE);
+
         chunk.setData(localX, worldY, localZ, data);
         chunk.rebuild();
     }
+
 
     public boolean hittingBox(Vector3 point) {
         int x = Math.round(point.x);
@@ -156,17 +180,17 @@ public class World implements DebugOverlay.DataProvider {
 
 
                 if (block != null) {
-                    byte blockData = 0;
                     if (block.hasTag(BlockTags.SLAB)) {
-                        if (getBlock(x, y, z) == block) {
-                            setBlock(x, y, z, block, SlabModel.FULL);
+                        if (getBlock(x, y, z) == block && getBlockData(x, y, z) != SlabModel.FULL) {
+                            setBlockData(x, y, z, SlabModel.FULL);
                             return;
                         } else {
-                            blockData = hitUpper ? SlabModel.UPPER : SlabModel.LOWER;
+                            byte blockData = hitUpper ? SlabModel.UPPER : SlabModel.LOWER;
+                            setBlockData(lastX, lastY, lastZ, blockData);
                         }
                     }
 
-                    setBlock(lastX, lastY, lastZ, block, blockData);
+                    setBlock(lastX, lastY, lastZ, block);
                 } else {
                     setBlock(x, y, z, null);
                 }
