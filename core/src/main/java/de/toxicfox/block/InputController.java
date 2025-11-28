@@ -34,7 +34,7 @@ public class InputController extends FirstPersonCameraController implements Debu
                 selectedBlockIndex++;
             }
         } else if (keycode == Input.Keys.DOWN) {
-            if (selectedBlockIndex > 1) {
+            if (selectedBlockIndex > 0) {
                 selectedBlockIndex--;
             }
         }
