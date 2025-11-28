@@ -7,15 +7,15 @@ import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 import de.toxicfox.block.world.chunk.generator.GenerationStep;
 import de.toxicfox.block.world.chunk.generator.HeightMap;
 
-public class BerryGenerationStep implements GenerationStep {
+public class FlowerGenerationStep implements GenerationStep {
     @Override
     public void generate(ChunkGenerator generator, Chunk chunk, int offsetX, int offsetZ, HeightMap heightMap) {
         for (int x = 0; x < Chunk.SIZE; x++) {
             for (int z = 0; z < Chunk.SIZE; z++) {
-                if (generator.berryNoise.noise(x + offsetX, z + offsetZ) > 0.6) {
+                if (generator.flowerNoise.noise(x + offsetX, z + offsetZ) > 0.6) {
                     int height = heightMap.get(x, z);
                     if (chunk.get(x, height, z) != null && chunk.get(x, height, z).hasTag(BlockTags.FULL_BLOCK)) {
-                        chunk.set(x, height + 1, z, Block.BERRY);
+                        chunk.set(x, height + 1, z, Block.FLOWER);
                     }
                 }
             }

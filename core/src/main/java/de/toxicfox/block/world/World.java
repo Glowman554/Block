@@ -4,27 +4,28 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.math.Vector3;
-
-import java.util.ArrayList;
-
 import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.chunk.Chunk;
-import de.toxicfox.block.world.chunk.ChunkStore;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
+
+import java.util.ArrayList;
 
 public class World implements DebugOverlay.DataProvider {
 
     private final Vector3 playerPosition = new Vector3();
     private final ArrayList<Chunk> loadedChunks = new ArrayList<>();
     private final ChunkGenerator generator;
-    private final ChunkStore store;
+    private final WorldStore store;
     private final int renderDistance;
+    private final long seed;
 
-    public World(int seed, int renderDistance, boolean persistWorld) {
+    public World(int renderDistance, boolean persistWorld, String worldFolder) {
+        this.store = new WorldStore(worldFolder, persistWorld);
+
+        this.seed = store.loadOrGenerateWorldSeed();
         this.generator = new ChunkGenerator(seed);
         this.renderDistance = renderDistance;
-        this.store = new ChunkStore("world1", persistWorld);
     }
 
     public void update(Vector3 playerPos) {
@@ -198,7 +199,7 @@ public class World implements DebugOverlay.DataProvider {
                 int chunkZ = playerChunkZ + z;
 
                 if (!isChunkLoaded(chunkX, chunkZ)) {
-                    Chunk newChunk = new Chunk(store, generator, chunkX, chunkZ);
+                    Chunk newChunk = new Chunk(store.getChunkStore(), generator, chunkX, chunkZ);
                     loadedChunks.add(newChunk);
                 }
             }
@@ -221,7 +222,7 @@ public class World implements DebugOverlay.DataProvider {
         }
 
         for (Chunk chunk : toUnload) {
-            chunk.dispose(store);
+            chunk.dispose(store.getChunkStore());
             loadedChunks.remove(chunk);
         }
     }
@@ -234,7 +235,7 @@ public class World implements DebugOverlay.DataProvider {
 
     public void dispose() {
         for (Chunk chunk : loadedChunks) {
-            chunk.dispose(store);
+            chunk.dispose(store.getChunkStore());
         }
         store.dispose();
     }
@@ -242,5 +243,6 @@ public class World implements DebugOverlay.DataProvider {
     @Override
     public void addDebugLines(DebugOverlay r, BitmapFont font) {
         r.text(String.format("Chunks loaded: %d", loadedChunks.size()), font);
+        r.text(String.format("Seed: %d", seed), font);
     }
 }

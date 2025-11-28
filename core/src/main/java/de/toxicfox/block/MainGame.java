@@ -13,7 +13,6 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-
 import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.debug.FPSOverlay;
 import de.toxicfox.block.debug.GLProfilerOverlay;
@@ -43,7 +42,7 @@ public class MainGame extends ApplicationAdapter {
         this.configuration = configuration;
     }
 
-    // TODO: save chunks (save on thread and remove from loaded after that)
+    // TODO:
     //       sounds
     //       add flowers and proper berries
 
@@ -66,8 +65,8 @@ public class MainGame extends ApplicationAdapter {
         environment.add(new DirectionalLight().set(0.2f, 0.2f, 0.2f, 1f, 0.8f, 0.5f));
 
         Block.create();
-        // DynamicAtlas.BLOCK_ATLAS.saveAtlas("debug", "block_atlas.png");
-        world = new World(1, configuration.renderDistance(), configuration.persistWorld());
+        // DynamicAtlas.BLOCK_ATLAS.saveAtlas("../debug", "block_atlas.png");
+        world = new World(configuration.renderDistance(), configuration.persistWorld(), configuration.worldFolder());
 
 
         inputController = new InputController(camera, world, configuration.touchMode());
@@ -82,7 +81,9 @@ public class MainGame extends ApplicationAdapter {
             inputMultiplexer.addProcessor(touchInputController.getStage());
         }
         Gdx.input.setInputProcessor(inputMultiplexer);
-        Gdx.input.setCursorCatched(true);
+        if (configuration.captureCursor()) {
+            Gdx.input.setCursorCatched(true);
+        }
 
         debugOverlay = new DebugOverlay(spriteBatch);
         debugOverlay.register(world);
@@ -105,9 +106,9 @@ public class MainGame extends ApplicationAdapter {
     public void render() {
         update();
 
-
         Gdx.gl.glClearColor(0.5f, 0.8f, 1f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        Gdx.gl.glEnable(GL20.GL_DEPTH_TEST);
 
         modelBatch.begin(camera);
         world.render(modelBatch, environment);

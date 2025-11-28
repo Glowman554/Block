@@ -1,12 +1,12 @@
 package de.toxicfox.block.world.chunk.block;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import de.toxicfox.block.world.chunk.block.models.CrossPlaneModel;
 import de.toxicfox.block.world.chunk.block.models.DefaultModel;
 import de.toxicfox.block.world.chunk.block.models.DefaultModelUniform;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public enum Block {
     GRASS("Grass", (byte) 1, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK)),
@@ -14,13 +14,16 @@ public enum Block {
     BERRY("Berry", (byte) 3, new CrossPlaneModel(), Set.of()),
     COAL("Coal", (byte) 4, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
     DIRT("Dirt", (byte) 5, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
-    GLASS("Glass", (byte) 6, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    GLASS("Glass", (byte) 6, new DefaultModelUniform(), Set.of()),
     GOLD("Gold", (byte) 7, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
     LEAVES("Leaves", (byte) 8, new DefaultModelUniform(), Set.of()),
     SAND("Sand", (byte) 9, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
     STONE("Stone", (byte) 10, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
-    WATER("Water", (byte) 10, new DefaultModelUniform(), Set.of()),
-    WOOD("Wood", (byte) 12, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK));
+    WATER("Water", (byte) 11, new DefaultModelUniform(), Set.of()),
+    WOOD("Wood", (byte) 12, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    FLOWER("Flower", (byte) 13, new CrossPlaneModel(), Set.of()),
+    ICE("Ice", (byte) 14, new DefaultModelUniform(), Set.of()),
+    LOG("Log", (byte) 15, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK));
 
     private static final Map<Byte, Block> NUMERIC_ID_MAP = new HashMap<>();
 

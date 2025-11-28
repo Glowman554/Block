@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Vector3;
-
 import de.toxicfox.block.texture.DynamicAtlas;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 
 public class Chunk {
-    public static final int SIZE = 32;
+    public static final int SIZE = 8;
     public static final int HEIGHT = 64;
 
     private final int chunkX;

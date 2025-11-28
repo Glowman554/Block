@@ -5,12 +5,11 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.utils.FirstPersonCameraController;
-
-import java.util.HashMap;
-
 import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.World;
 import de.toxicfox.block.world.chunk.block.Block;
+
+import java.util.HashMap;
 
 public class InputController extends FirstPersonCameraController implements DebugOverlay.DataProvider {
     private final World world;
@@ -23,6 +22,10 @@ public class InputController extends FirstPersonCameraController implements Debu
         put(Input.Keys.NUM_4, Block.STONE);
         put(Input.Keys.NUM_5, Block.SAND);
         put(Input.Keys.NUM_6, Block.WOOD);
+        put(Input.Keys.NUM_7, Block.GLASS);
+        put(Input.Keys.NUM_8, Block.WATER);
+        put(Input.Keys.NUM_9, Block.ICE);
+        put(Input.Keys.NUM_0, Block.LOG);
     }};
     private Block currentBlock = Block.DIRT;
 

@@ -1,35 +1,30 @@
 package de.toxicfox.block.world.chunk;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 
+import java.io.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ChunkStore {
-    private final File worldDirectory;
+    private final File chunkDirectory;
     private final ExecutorService pool = Executors.newFixedThreadPool(8);
 
     private final boolean persistWorld;
 
-    public ChunkStore(String world, boolean persistWorld) {
+    public ChunkStore(File chunkDirectory, boolean persistWorld) {
         this.persistWorld = persistWorld;
 
-        worldDirectory = new File(world);
+        this.chunkDirectory = chunkDirectory;
 
         if (persistWorld) {
-            worldDirectory.mkdirs();
+            chunkDirectory.mkdirs();
         }
     }
 
     private File getDataFile(Chunk chunk) {
-        return new File(worldDirectory, String.format("%d,%d.chunk", chunk.getChunkX(), chunk.getChunkZ()));
+        return new File(chunkDirectory, String.format("%d,%d.chunk", chunk.getChunkX(), chunk.getChunkZ()));
     }
 
     public void scheduleStore(Chunk chunk) {

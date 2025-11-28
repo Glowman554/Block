@@ -7,10 +7,12 @@ import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 
 public class DynamicAtlas {
-    public static final DynamicAtlas BLOCK_ATLAS = new DynamicAtlas(80, 6 * 6);
+    public static final DynamicAtlas BLOCK_ATLAS = new DynamicAtlas(20, 6 * 6);
 
     private final int tileSize;
     private final int tilesX;
@@ -29,7 +31,7 @@ public class DynamicAtlas {
 
         int pageSize = (int) (Math.sqrt(capacity) * tileSize) + 1;
         this.pixmap = new Pixmap(pageSize, pageSize, Pixmap.Format.RGBA8888);
-        this.texture = new Texture(pageSize, pageSize, Pixmap.Format.RGBA8888);
+        this.texture = new Texture(pixmap);
 
         this.tilesX = pageSize / tileSize;
         this.tilesY = pageSize / tileSize;
@@ -69,6 +71,8 @@ public class DynamicAtlas {
         if (atlasMaterial == null) {
             atlasMaterial = new Material();
             atlasMaterial.set(TextureAttribute.createDiffuse(texture));
+            atlasMaterial.set(new BlendingAttribute(true, 1f));
+            atlasMaterial.set(new FloatAttribute(FloatAttribute.AlphaTest, 0.5f));
         }
         return atlasMaterial;
     }

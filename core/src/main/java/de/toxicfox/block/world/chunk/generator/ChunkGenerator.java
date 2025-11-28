@@ -1,14 +1,11 @@
 package de.toxicfox.block.world.chunk.generator;
 
-import java.util.ArrayList;
-import java.util.Random;
-
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.NoiseGenerator;
-import de.toxicfox.block.world.chunk.generator.steps.BerryGenerationStep;
-import de.toxicfox.block.world.chunk.generator.steps.CaveCarvingStep;
-import de.toxicfox.block.world.chunk.generator.steps.SubSurfaceGenerationStep;
-import de.toxicfox.block.world.chunk.generator.steps.SurfaceGenerationStep;
+import de.toxicfox.block.world.chunk.generator.steps.*;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class ChunkGenerator {
     public static final int caveHeight = 16;
@@ -19,17 +16,27 @@ public class ChunkGenerator {
         add(new SurfaceGenerationStep());
         add(new CaveCarvingStep());
         add(new BerryGenerationStep());
-        //add(new DebugTowerStep());
+        add(new FlowerGenerationStep());
+        add(new TreeGenerationStep());
+        add(new WaterGenerationStep());
+        // add(new CheckerboardPatternStep());
     }};
     public final NoiseGenerator caveNoise;
     public final NoiseGenerator heightNoise;
     public final NoiseGenerator berryNoise;
+    public final NoiseGenerator flowerNoise;
+    public final NoiseGenerator treeNoise;
+    public final NoiseGenerator waterNoise;
 
-    public ChunkGenerator(int seed) {
+    public ChunkGenerator(long seed) {
+        System.out.printf("World seed: %d%n", seed);
         Random seeder = new Random(seed);
         caveNoise = new NoiseGenerator(seeder.nextInt());
         heightNoise = new NoiseGenerator(seeder.nextInt());
         berryNoise = new NoiseGenerator(seeder.nextInt());
+        flowerNoise = new NoiseGenerator(seeder.nextInt());
+        treeNoise = new NoiseGenerator(seeder.nextInt());
+        waterNoise = new NoiseGenerator(seeder.nextInt());
     }
 
     public void generateChunk(Chunk chunk) {
