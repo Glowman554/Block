@@ -14,7 +14,6 @@ public class WaterGenerationStep implements GenerationStep {
                 if (heightMap.get(x, z) == ChunkGenerator.caveHeight && chunk.get(x, ChunkGenerator.caveHeight, z) != null) {
                     if (generator.waterNoise.noise(x + offsetX, z + offsetZ) > 0.7) {
                         chunk.set(x, ChunkGenerator.caveHeight, z, Block.WATER);
-                        System.out.println("WAAAATER");
                     }
                 }
             }
