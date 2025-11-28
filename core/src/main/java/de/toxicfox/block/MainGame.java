@@ -42,10 +42,6 @@ public class MainGame extends ApplicationAdapter {
         this.configuration = configuration;
     }
 
-    // TODO:
-    //       sounds
-    //       add flowers and proper berries
-
     @Override
     public void create() {
         modelBatch = new ModelBatch();

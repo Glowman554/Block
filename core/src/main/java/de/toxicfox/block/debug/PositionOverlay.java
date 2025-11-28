@@ -2,7 +2,6 @@ package de.toxicfox.block.debug;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-
 import de.toxicfox.block.world.chunk.Chunk;
 
 public class PositionOverlay implements DebugOverlay.DataProvider {

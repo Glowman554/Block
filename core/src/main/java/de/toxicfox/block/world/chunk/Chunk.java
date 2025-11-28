@@ -188,12 +188,12 @@ public class Chunk {
         }
     }
 
-        private record BlockData(Block block, int x, int y, int z) {
+    private record BlockData(Block block, int x, int y, int z) {
 
         private Vector3 getWorldPosition(Vector3 chunkPos) {
-                return new Vector3(chunkPos.x + x, chunkPos.y + y, chunkPos.z + z);
-            }
+            return new Vector3(chunkPos.x + x, chunkPos.y + y, chunkPos.z + z);
         }
+    }
 
     public void dispose(ChunkStore store) {
         store.scheduleStore(this);

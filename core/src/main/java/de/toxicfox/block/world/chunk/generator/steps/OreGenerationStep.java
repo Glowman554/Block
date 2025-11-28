@@ -18,18 +18,18 @@ public class OreGenerationStep implements GenerationStep {
         this.threshold = threshold;
     }
 
-        @Override
-        public void generate(ChunkGenerator generator, Chunk chunk, int offsetX, int offsetZ, HeightMap heightMap) {
-            for (int x = 0; x < Chunk.SIZE; x++) {
-                for (int z = 0; z < Chunk.SIZE; z++) {
-                    for (int y = 0; y < ChunkGenerator.caveHeight; y++) {
-                        if (noise.noise(x + offsetX, y, z + offsetZ) > threshold) {
-                            chunk.set(x, y, z, block);
-                        }
+    @Override
+    public void generate(ChunkGenerator generator, Chunk chunk, int offsetX, int offsetZ, HeightMap heightMap) {
+        for (int x = 0; x < Chunk.SIZE; x++) {
+            for (int z = 0; z < Chunk.SIZE; z++) {
+                for (int y = 0; y < ChunkGenerator.caveHeight; y++) {
+                    if (noise.noise(x + offsetX, y, z + offsetZ) > threshold) {
+                        chunk.set(x, y, z, block);
                     }
                 }
             }
         }
+    }
 
 
 }

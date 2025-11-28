@@ -12,8 +12,11 @@ public class ChunkGenerator {
     public static final int surfaceHeight = Chunk.HEIGHT - caveHeight;
 
     private final ArrayList<GenerationStep> generators = new ArrayList<>();
+    private final long seed;
+
 
     public ChunkGenerator(long seed) {
+        this.seed = seed;
         System.out.printf("World seed: %d%n", seed);
         Random seeder = new Random(seed);
 
@@ -26,8 +29,11 @@ public class ChunkGenerator {
         generators.add(new SpotGenerationStep(seeder.nextInt(), Block.SAND, 0.6f));
         generators.add(new PlantGenerationStep(seeder.nextInt(), Block.BERRY, 0.65f));
         generators.add(new PlantGenerationStep(seeder.nextInt(), Block.FLOWER, 0.65f));
-        generators.add(new TreeGenerationStep(seeder.nextInt(), 0.6f));
+        generators.add(new ForrestGenerationStep(seeder.nextInt(), 0.6f));
+        generators.add(new StructureGenerationStep(seeder.nextInt(), 2, Structures.treeStructure, 0.97f)); // Place trees outside a forrest
+        generators.add(new StructureGenerationStep(seeder.nextInt(), 1, Structures.houseStructure, 0.99f));
     }
+
 
     public void generateChunk(Chunk chunk) {
         int offsetX = chunk.getChunkX() * Chunk.SIZE;
@@ -47,5 +53,9 @@ public class ChunkGenerator {
         long durationNs = (endTime - startTime);
 
         System.out.printf("[%d, %d] Chunk generated in %d ns%n", chunk.getChunkX(), chunk.getChunkZ(), durationNs);
+    }
+
+    public long getSeed() {
+        return seed;
     }
 }

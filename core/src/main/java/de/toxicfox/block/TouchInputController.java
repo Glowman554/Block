@@ -11,12 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.World;
 import de.toxicfox.block.world.chunk.block.Block;
-
-import java.util.ArrayList;
 
 public class TouchInputController implements DebugOverlay.DataProvider {
     private final Skin skin;
@@ -27,7 +24,7 @@ public class TouchInputController implements DebugOverlay.DataProvider {
     private final Camera camera;
 
     private int selectedBlockIndex = 0;
-    private Block[] blocks = Block.values();
+    private final Block[] blocks = Block.values();
 
     private final float scale = 2f;
 

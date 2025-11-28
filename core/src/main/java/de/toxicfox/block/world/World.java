@@ -175,7 +175,7 @@ public class World implements DebugOverlay.DataProvider {
         for (int i = 0; i < 100; i++) {
             if (getBlock(x, y, z) != null) {
                 Vector3 hitPoint = start.cpy().add(direction.cpy().scl(Math.min(tMaxX, Math.min(tMaxY, tMaxZ))));
-                float localY = hitPoint.y - (float)Math.floor(hitPoint.y);
+                float localY = hitPoint.y - (float) Math.floor(hitPoint.y);
                 boolean hitUpper = localY > 0.5f;
 
 

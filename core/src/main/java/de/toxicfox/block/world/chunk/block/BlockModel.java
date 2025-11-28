@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-
 import de.toxicfox.block.world.chunk.Chunk;
 
 public abstract class BlockModel {
@@ -41,10 +40,10 @@ public abstract class BlockModel {
         int width = region.getRegionWidth();
         int height = region.getRegionHeight();
 
-        int subX = (int)(x0 * width);
-        int subY = (int)(y0 * height);
-        int subWidth = (int)((x1 - x0) * width);
-        int subHeight = (int)((y1 - y0) * height);
+        int subX = (int) (x0 * width);
+        int subY = (int) (y0 * height);
+        int subWidth = (int) ((x1 - x0) * width);
+        int subHeight = (int) ((y1 - y0) * height);
 
         return new TextureRegion(region, subX, subY, subWidth, subHeight);
     }

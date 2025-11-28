@@ -2,12 +2,10 @@ package de.toxicfox.block.world.chunk.block.models;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
-
 import de.toxicfox.block.texture.DynamicAtlas;
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.block.BlockModel;
-import de.toxicfox.block.world.chunk.block.BlockTags;
 
 public class WaterModel extends BlockModel {
     private TextureRegion texture;

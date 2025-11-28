@@ -9,14 +9,12 @@ import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.World;
 import de.toxicfox.block.world.chunk.block.Block;
 
-import java.util.HashMap;
-
 public class InputController extends FirstPersonCameraController implements DebugOverlay.DataProvider {
     private final World world;
     private final boolean touchMode;
 
     private int selectedBlockIndex = 0;
-    private Block[] blocks = Block.values();
+    private final Block[] blocks = Block.values();
 
     public InputController(Camera camera, World world, boolean touchMode) {
         super(camera);
@@ -35,7 +33,7 @@ public class InputController extends FirstPersonCameraController implements Debu
             if (selectedBlockIndex < blocks.length - 1) {
                 selectedBlockIndex++;
             }
-        }else if (keycode == Input.Keys.DOWN) {
+        } else if (keycode == Input.Keys.DOWN) {
             if (selectedBlockIndex > 1) {
                 selectedBlockIndex--;
             }

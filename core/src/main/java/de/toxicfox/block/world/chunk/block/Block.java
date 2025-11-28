@@ -25,8 +25,7 @@ public enum Block {
     WOODSLAB("WoodSlab", (byte) 16, new SlabModel(), Set.of(BlockTags.SLAB)),
     STONESLAB("StoneSlab", (byte) 17, new SlabModel(), Set.of(BlockTags.SLAB)),
     DIRTSLAB("DirtSlab", (byte) 18, new SlabModel(), Set.of(BlockTags.SLAB)),
-    TESTSLAB("Testslab", (byte) 19, new SlabModel(), Set.of(BlockTags.SLAB))
-    ;
+    TESTSLAB("Testslab", (byte) 19, new SlabModel(), Set.of(BlockTags.SLAB));
 
     private static final Map<Byte, Block> NUMERIC_ID_MAP = new HashMap<>();
 

@@ -1,13 +1,11 @@
 package de.toxicfox.block.world.chunk.block.models;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import de.toxicfox.block.texture.DynamicAtlas;
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.block.BlockModel;
-import de.toxicfox.block.world.chunk.block.BlockTags;
 
 public class SlabModel extends BlockModel {
 
@@ -108,8 +106,6 @@ public class SlabModel extends BlockModel {
     }
 
 
-
-
     @Override
     public void initialize(String id) {
         texture = DynamicAtlas.BLOCK_ATLAS.addTexture(load("texture/" + id + ".png"), true);
@@ -118,5 +114,6 @@ public class SlabModel extends BlockModel {
     }
 
     @Override
-    public void dispose() {}
+    public void dispose() {
+    }
 }
