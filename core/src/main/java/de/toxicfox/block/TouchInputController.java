@@ -18,10 +18,14 @@ public class TouchInputController {
     private final Skin skin;
     private final Stage stage;
 
+    private boolean forwardPressed = false;
+    private boolean backwardPressed = false;
+    private final Camera camera;
 
     private final float scale = 2f;
 
     public TouchInputController(World world, Camera camera) {
+        this.camera = camera;
         skin = new Skin(Gdx.files.internal("ui/uiskin.json"));
         stage = new Stage(new ScreenViewport());
 
@@ -57,10 +61,13 @@ public class TouchInputController {
         forward.scaleBy(scale);
         forward.addListener(new InputListener() {
             @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                forwardPressed = false;
+            }
+
+            @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Vector3 tmp = new Vector3();
-                tmp.set(camera.direction).nor().scl(1);
-                camera.position.add(tmp);
+                forwardPressed = true;
                 return true;
             }
         });
@@ -72,10 +79,13 @@ public class TouchInputController {
         backward.scaleBy(scale);
         backward.addListener(new InputListener() {
             @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                backwardPressed = false;
+            }
+
+            @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                Vector3 tmp = new Vector3();
-                tmp.set(camera.direction).nor().scl(-1);
-                camera.position.add(tmp);
+                backwardPressed = true;
                 return true;
             }
         });
@@ -84,6 +94,16 @@ public class TouchInputController {
 
     public void update() {
         stage.act();
+
+        Vector3 tmp = new Vector3();
+        if (forwardPressed) {
+            tmp.set(camera.direction).nor().scl(0.5f); // 0.1f is movement speed, tweak as needed
+            camera.position.add(tmp);
+        }
+        if (backwardPressed) {
+            tmp.set(camera.direction).nor().scl(-0.5f);
+            camera.position.add(tmp);
+        }
     }
 
     public void render() {
