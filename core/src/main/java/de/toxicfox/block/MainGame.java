@@ -89,7 +89,11 @@ public class MainGame extends ApplicationAdapter {
         debugOverlay.register(world);
         debugOverlay.register(new FPSOverlay());
         debugOverlay.register(new GLProfilerOverlay());
-        debugOverlay.register(inputController);
+        if (configuration.touchMode()) {
+            debugOverlay.register(touchInputController);
+        } else {
+            debugOverlay.register(inputController);
+        }
         debugOverlay.register(new PositionOverlay(camera));
     }
 

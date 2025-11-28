@@ -15,19 +15,8 @@ public class InputController extends FirstPersonCameraController implements Debu
     private final World world;
     private final boolean touchMode;
 
-    private final HashMap<Integer, Block> blockMapping = new HashMap<>() {{
-        put(Input.Keys.NUM_1, Block.DIRT);
-        put(Input.Keys.NUM_2, Block.GRASS);
-        put(Input.Keys.NUM_3, Block.LEAVES);
-        put(Input.Keys.NUM_4, Block.STONE);
-        put(Input.Keys.NUM_5, Block.SAND);
-        put(Input.Keys.NUM_6, Block.WOOD);
-        put(Input.Keys.NUM_7, Block.GLASS);
-        put(Input.Keys.NUM_8, Block.WATER);
-        put(Input.Keys.NUM_9, Block.ICE);
-        put(Input.Keys.NUM_0, Block.LOG);
-    }};
-    private Block currentBlock = Block.DIRT;
+    private int selectedBlockIndex = 0;
+    private Block[] blocks = Block.values();
 
     public InputController(Camera camera, World world, boolean touchMode) {
         super(camera);
@@ -40,10 +29,16 @@ public class InputController extends FirstPersonCameraController implements Debu
 
     @Override
     public boolean keyDown(int keycode) {
-        if (blockMapping.containsKey(keycode)) {
-            currentBlock = blockMapping.get(keycode);
-        } else if (keycode == Input.Keys.ESCAPE) {
+        if (keycode == Input.Keys.ESCAPE) {
             Gdx.app.exit();
+        } else if (keycode == Input.Keys.UP) {
+            if (selectedBlockIndex < blocks.length - 1) {
+                selectedBlockIndex++;
+            }
+        }else if (keycode == Input.Keys.DOWN) {
+            if (selectedBlockIndex > 1) {
+                selectedBlockIndex--;
+            }
         }
 
         return super.keyDown(keycode);
@@ -59,7 +54,7 @@ public class InputController extends FirstPersonCameraController implements Debu
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         if (button == 0 && !touchMode) {
-            world.editBoxByRayCast(camera.position, camera.direction, currentBlock);
+            world.editBoxByRayCast(camera.position, camera.direction, blocks[selectedBlockIndex]);
         } else if (button == 1 && !touchMode) {
             world.editBoxByRayCast(camera.position, camera.direction, null);
         }
@@ -69,6 +64,6 @@ public class InputController extends FirstPersonCameraController implements Debu
 
     @Override
     public void addDebugLines(DebugOverlay r, BitmapFont font) {
-        r.text(String.format("Selected block: %s", currentBlock.getId()), font);
+        r.text(String.format("Selected block: %s", blocks[selectedBlockIndex].getId()), font);
     }
 }

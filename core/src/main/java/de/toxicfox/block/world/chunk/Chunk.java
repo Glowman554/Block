@@ -25,6 +25,7 @@ public class Chunk {
     private final int chunkZ;
 
     private final Block[][][] blocks = new Block[SIZE][HEIGHT][SIZE];
+    private final byte[][][] blockdata = new byte[SIZE][HEIGHT][SIZE];
     private final Vector3 position = new Vector3();
     private Model model;
     private ModelInstance instance;
@@ -57,6 +58,20 @@ public class Chunk {
             return;
         }
         blocks[x][y][z] = block;
+    }
+
+    public byte getData(int x, int y, int z) {
+        if (x < 0 || x >= SIZE || y < 0 || y >= HEIGHT || z < 0 || z >= SIZE) {
+            return 0;
+        }
+        return blockdata[x][y][z];
+    }
+
+    public void setData(int x, int y, int z, byte data) {
+        if (x < 0 || x >= SIZE || y < 0 || y >= HEIGHT || z < 0 || z >= SIZE) {
+            return;
+        }
+        blockdata[x][y][z] = data;
     }
 
     private void setPosition(float x, float y, float z) {
@@ -173,22 +188,12 @@ public class Chunk {
         }
     }
 
-    // Helper class
-    private static class BlockData {
-        final Block block;
-        final int x, y, z;
+        private record BlockData(Block block, int x, int y, int z) {
 
-        BlockData(Block block, int x, int y, int z) {
-            this.block = block;
-            this.x = x;
-            this.y = y;
-            this.z = z;
+        private Vector3 getWorldPosition(Vector3 chunkPos) {
+                return new Vector3(chunkPos.x + x, chunkPos.y + y, chunkPos.z + z);
+            }
         }
-
-        Vector3 getWorldPosition(Vector3 chunkPos) {
-            return new Vector3(chunkPos.x + x, chunkPos.y + y, chunkPos.z + z);
-        }
-    }
 
     public void dispose(ChunkStore store) {
         store.scheduleStore(this);

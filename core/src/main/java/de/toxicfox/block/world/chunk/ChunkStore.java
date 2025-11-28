@@ -42,9 +42,11 @@ public class ChunkStore {
                         for (int z = 0; z < Chunk.SIZE; z++) {
 
                             Block block = chunk.get(x, y, z);
+                            byte data = chunk.getData(x, y, z);
                             byte id = (block == null) ? 0 : block.getNumericId();
 
                             out.writeByte(id);
+                            out.writeByte(data);
                         }
                     }
                 }
@@ -75,7 +77,9 @@ public class ChunkStore {
                     for (int z = 0; z < Chunk.SIZE; z++) {
 
                         byte id = in.readByte();
+                        byte data = in.readByte();
                         chunk.set(x, y, z, id == 0 ? null : Block.fromNumericId(id));
+                        chunk.setData(x, y, z, data);
                     }
                 }
             }

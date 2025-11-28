@@ -10,10 +10,12 @@ import de.toxicfox.block.world.chunk.generator.HeightMap;
 public class OreGenerationStep implements GenerationStep {
     private final NoiseGenerator noise;
     private final Block block;
+    private final float threshold;
 
-    public OreGenerationStep(NoiseGenerator noise, Block block) {
-        this.noise = noise;
+    public OreGenerationStep(int seed, Block block, float threshold) {
+        this.noise = new NoiseGenerator(seed);
         this.block = block;
+        this.threshold = threshold;
     }
 
         @Override
@@ -21,7 +23,7 @@ public class OreGenerationStep implements GenerationStep {
             for (int x = 0; x < Chunk.SIZE; x++) {
                 for (int z = 0; z < Chunk.SIZE; z++) {
                     for (int y = 0; y < ChunkGenerator.caveHeight; y++) {
-                        if (noise.noise(x + offsetX, y, z + offsetZ) > 0.7) {
+                        if (noise.noise(x + offsetX, y, z + offsetZ) > threshold) {
                             chunk.set(x, y, z, block);
                         }
                     }

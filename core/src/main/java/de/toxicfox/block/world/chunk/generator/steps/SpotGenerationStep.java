@@ -10,10 +10,12 @@ import de.toxicfox.block.world.chunk.generator.HeightMap;
 public class SpotGenerationStep implements GenerationStep {
     private final NoiseGenerator noise;
     private final Block block;
+    private final float threshold;
 
-    public SpotGenerationStep(NoiseGenerator noise, Block block) {
-        this.noise = noise;
+    public SpotGenerationStep(int seed, Block block, float threshold) {
+        this.noise = new NoiseGenerator(seed);
         this.block = block;
+        this.threshold = threshold;
     }
 
     @Override
@@ -21,7 +23,7 @@ public class SpotGenerationStep implements GenerationStep {
         for (int x = 0; x < Chunk.SIZE; x++) {
             for (int z = 0; z < Chunk.SIZE; z++) {
                 if (heightMap.get(x, z) == ChunkGenerator.caveHeight && chunk.get(x, ChunkGenerator.caveHeight, z) != null) {
-                    if (noise.noise(x + offsetX, z + offsetZ) > 0.7) {
+                    if (noise.noise(x + offsetX, z + offsetZ) > threshold) {
                         chunk.set(x, ChunkGenerator.caveHeight, z, block);
                     }
                 }

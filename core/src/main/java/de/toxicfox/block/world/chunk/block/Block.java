@@ -21,7 +21,10 @@ public enum Block {
     WOOD("Wood", (byte) 12, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
     FLOWER("Flower", (byte) 13, new CrossPlaneModel(), Set.of()),
     ICE("Ice", (byte) 14, new DefaultModelUniform(), Set.of(BlockTags.TRANSPARENT, BlockTags.FULL_BLOCK)),
-    LOG("Log", (byte) 15, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK));
+    LOG("Log", (byte) 15, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK)),
+    WOODSLAB("WoodSlab", (byte) 16, new SlabModel(), Set.of(BlockTags.SLAB)),
+    STONESLAB("StoneSlab", (byte) 17, new SlabModel(), Set.of(BlockTags.SLAB)),
+    DIRTSLAB("DirtSlab", (byte) 18, new SlabModel(), Set.of(BlockTags.SLAB));
 
     private static final Map<Byte, Block> NUMERIC_ID_MAP = new HashMap<>();
 

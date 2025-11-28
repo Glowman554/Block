@@ -1,18 +1,25 @@
 package de.toxicfox.block.world.chunk.generator.steps;
 
 import de.toxicfox.block.world.chunk.Chunk;
+import de.toxicfox.block.world.chunk.NoiseGenerator;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 import de.toxicfox.block.world.chunk.generator.GenerationStep;
 import de.toxicfox.block.world.chunk.generator.HeightMap;
 
 public class SurfaceGenerationStep implements GenerationStep {
+    private final NoiseGenerator noise;
+
+    public SurfaceGenerationStep(int seed) {
+        this.noise = new NoiseGenerator(seed);
+    }
+
     @Override
     public void generate(ChunkGenerator generator, Chunk chunk, int offsetX, int offsetZ, HeightMap heightMap) {
         for (int x = 0; x < Chunk.SIZE; x++) {
             for (int z = 0; z < Chunk.SIZE; z++) {
                 // General height step
-                int height = (int) (generator.heightNoise.noise(x + offsetX, z + offsetZ) * ChunkGenerator.surfaceHeight);
+                int height = (int) (noise.noise(x + offsetX, z + offsetZ) * ChunkGenerator.surfaceHeight);
                 for (int y = 0; y < height; y++) {
 
                     if (y < height - 3) {

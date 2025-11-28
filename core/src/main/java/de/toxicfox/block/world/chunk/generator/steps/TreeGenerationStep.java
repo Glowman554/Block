@@ -1,8 +1,8 @@
 package de.toxicfox.block.world.chunk.generator.steps;
 
 import de.toxicfox.block.world.chunk.Chunk;
+import de.toxicfox.block.world.chunk.NoiseGenerator;
 import de.toxicfox.block.world.chunk.block.Block;
-import de.toxicfox.block.world.chunk.block.BlockTags;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 import de.toxicfox.block.world.chunk.generator.GenerationStep;
 import de.toxicfox.block.world.chunk.generator.HeightMap;
@@ -12,10 +12,17 @@ import java.util.Random;
 public class TreeGenerationStep implements GenerationStep {
 
     private final int treeHeight = 4; // trunk height
+    private final NoiseGenerator noise;
+    private final float threshold;
+
+    public TreeGenerationStep(int seed, float threshold) {
+        this.noise = new NoiseGenerator(seed);
+        this.threshold = threshold;
+    }
 
     @Override
     public void generate(ChunkGenerator generator, Chunk chunk, int offsetX, int offsetZ, HeightMap heightMap) {
-        if (generator.treeNoise.noise(chunk.getChunkX(), chunk.getChunkZ()) < 0.6) {
+        if (noise.noise(chunk.getChunkX(), chunk.getChunkZ()) < threshold) {
             return;
         }
 

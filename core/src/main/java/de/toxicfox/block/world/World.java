@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector3;
 import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.block.Block;
+import de.toxicfox.block.world.chunk.block.BlockTags;
+import de.toxicfox.block.world.chunk.block.models.SlabModel;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 
 import java.util.ArrayList;
@@ -64,6 +66,10 @@ public class World implements DebugOverlay.DataProvider {
     }
 
     public void setBlock(int worldX, int worldY, int worldZ, Block block) {
+        setBlock(worldX, worldY, worldZ, block, (byte) 0);
+    }
+
+    public void setBlock(int worldX, int worldY, int worldZ, Block block, byte data) {
         int chunkX = (int) Math.floor((double) worldX / Chunk.SIZE);
         int chunkZ = (int) Math.floor((double) worldZ / Chunk.SIZE);
 
@@ -76,6 +82,7 @@ public class World implements DebugOverlay.DataProvider {
         int localZ = Math.floorMod(worldZ, Chunk.SIZE);
 
         chunk.set(localX, worldY, localZ, block);
+        chunk.setData(localX, worldY, localZ, data);
         chunk.rebuild();
     }
 
@@ -143,8 +150,23 @@ public class World implements DebugOverlay.DataProvider {
 
         for (int i = 0; i < 100; i++) {
             if (getBlock(x, y, z) != null) {
+                Vector3 hitPoint = start.cpy().add(direction.cpy().scl(Math.min(tMaxX, Math.min(tMaxY, tMaxZ))));
+                float localY = hitPoint.y - (float)Math.floor(hitPoint.y);
+                boolean hitUpper = localY > 0.5f;
+
+
                 if (block != null) {
-                    setBlock(lastX, lastY, lastZ, block);
+                    byte blockData = 0;
+                    if (block.hasTag(BlockTags.SLAB)) {
+                        if (getBlock(x, y, z) == block) {
+                            setBlock(x, y, z, block, SlabModel.FULL);
+                            return;
+                        } else {
+                            blockData = hitUpper ? SlabModel.UPPER : SlabModel.LOWER;
+                        }
+                    }
+
+                    setBlock(lastX, lastY, lastZ, block, blockData);
                 } else {
                     setBlock(x, y, z, null);
                 }

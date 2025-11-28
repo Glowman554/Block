@@ -2,6 +2,7 @@ package de.toxicfox.block;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -11,18 +12,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import de.toxicfox.block.debug.DebugOverlay;
 import de.toxicfox.block.world.World;
 import de.toxicfox.block.world.chunk.block.Block;
 
 import java.util.ArrayList;
 
-public class TouchInputController {
+public class TouchInputController implements DebugOverlay.DataProvider {
     private final Skin skin;
     private final Stage stage;
 
     private boolean forwardPressed = false;
     private boolean backwardPressed = false;
     private final Camera camera;
+
+    private int selectedBlockIndex = 0;
+    private Block[] blocks = Block.values();
 
     private final float scale = 2f;
 
@@ -38,7 +43,7 @@ public class TouchInputController {
         place.addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                world.editBoxByRayCast(camera.position, camera.direction, Block.DIRT);
+                world.editBoxByRayCast(camera.position, camera.direction, blocks[selectedBlockIndex]);
                 return true;
             }
         });
@@ -56,6 +61,20 @@ public class TouchInputController {
             }
         });
         stage.addActor(destroy);
+
+        Button nextBlock = new TextButton("Next block", skin, "default");
+        nextBlock.setPosition(Gdx.graphics.getWidth() - 350, Gdx.graphics.getHeight() - 200);
+        nextBlock.setTransform(true);
+        nextBlock.scaleBy(scale);
+        nextBlock.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                selectedBlockIndex = (selectedBlockIndex + 1) % blocks.length;
+                return true;
+            }
+        });
+        stage.addActor(nextBlock);
+
 
         Button forward = new TextButton("Forward", skin, "default");
         forward.setPosition(200, 200);
@@ -124,5 +143,10 @@ public class TouchInputController {
     public void dispose() {
         skin.dispose();
         stage.dispose();
+    }
+
+    @Override
+    public void addDebugLines(DebugOverlay r, BitmapFont font) {
+        r.text(String.format("Selected block: %s", blocks[selectedBlockIndex].getId()), font);
     }
 }

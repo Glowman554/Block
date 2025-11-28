@@ -30,7 +30,7 @@ public class DefaultModel extends BlockModel {
             return false;
         }
 
-        return !neighbor.hasTag(BlockTags.FULL_BLOCK);
+        return !neighbor.hasTag(BlockTags.FULL_BLOCK) ||  neighbor.hasTag(BlockTags.TRANSPARENT);
     }
 
 
