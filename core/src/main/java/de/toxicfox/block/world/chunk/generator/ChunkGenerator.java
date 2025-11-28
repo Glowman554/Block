@@ -2,6 +2,7 @@ package de.toxicfox.block.world.chunk.generator;
 
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.NoiseGenerator;
+import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.generator.steps.*;
 
 import java.util.ArrayList;
@@ -11,22 +12,17 @@ public class ChunkGenerator {
     public static final int caveHeight = 16;
     public static final int surfaceHeight = Chunk.HEIGHT - caveHeight;
 
-    private static final ArrayList<GenerationStep> generators = new ArrayList<>() {{
-        add(new SubSurfaceGenerationStep());
-        add(new SurfaceGenerationStep());
-        add(new CaveCarvingStep());
-        add(new BerryGenerationStep());
-        add(new FlowerGenerationStep());
-        add(new TreeGenerationStep());
-        add(new WaterGenerationStep());
-        // add(new CheckerboardPatternStep());
-    }};
+    private final ArrayList<GenerationStep> generators = new ArrayList<>();
+
     public final NoiseGenerator caveNoise;
     public final NoiseGenerator heightNoise;
     public final NoiseGenerator berryNoise;
     public final NoiseGenerator flowerNoise;
     public final NoiseGenerator treeNoise;
     public final NoiseGenerator waterNoise;
+    public final NoiseGenerator coalNoise;
+    public final NoiseGenerator goldNoise;
+    public final NoiseGenerator sandNoise;
 
     public ChunkGenerator(long seed) {
         System.out.printf("World seed: %d%n", seed);
@@ -37,6 +33,20 @@ public class ChunkGenerator {
         flowerNoise = new NoiseGenerator(seeder.nextInt());
         treeNoise = new NoiseGenerator(seeder.nextInt());
         waterNoise = new NoiseGenerator(seeder.nextInt());
+        coalNoise = new NoiseGenerator(seeder.nextInt());
+        goldNoise = new NoiseGenerator((seeder.nextInt()));
+        sandNoise = new NoiseGenerator((seeder.nextInt()));
+
+        generators.add(new SubSurfaceGenerationStep());
+        generators.add(new OreGenerationStep(coalNoise, Block.COAL));
+        generators.add(new OreGenerationStep(goldNoise, Block.GOLD));
+        generators.add(new SurfaceGenerationStep());
+        generators.add(new CaveCarvingStep());
+        generators.add(new SpotGenerationStep(waterNoise, Block.WATER));
+        generators.add(new SpotGenerationStep(sandNoise, Block.SAND));
+        generators.add(new PlantGenerationStep(berryNoise, Block.BERRY));
+        generators.add(new PlantGenerationStep(flowerNoise, Block.FLOWER));
+        generators.add(new TreeGenerationStep());
     }
 
     public void generateChunk(Chunk chunk) {

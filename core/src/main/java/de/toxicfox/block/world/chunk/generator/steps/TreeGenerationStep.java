@@ -25,7 +25,7 @@ public class TreeGenerationStep implements GenerationStep {
 
 
         int treeY = heightMap.get(treeX, treeZ) + 1;
-        if (chunk.get(treeX, treeY - 1, treeZ) == null || !chunk.get(treeX, treeY - 1, treeZ).hasTag(BlockTags.FULL_BLOCK)) {
+        if (chunk.get(treeX, treeY - 1, treeZ) == null || chunk.get(treeX, treeY - 1, treeZ) != Block.GRASS) {
             return;
         }
 
