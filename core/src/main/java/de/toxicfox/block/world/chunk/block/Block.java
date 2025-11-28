@@ -1,0 +1,77 @@
+package de.toxicfox.block.world.chunk.block;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import de.toxicfox.block.world.chunk.block.models.CrossPlaneModel;
+import de.toxicfox.block.world.chunk.block.models.DefaultModel;
+import de.toxicfox.block.world.chunk.block.models.DefaultModelUniform;
+
+public enum Block {
+    GRASS("Grass", (byte) 1, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK)),
+    TESTBLOCK("Testblock", (byte) 2, new DefaultModel(), Set.of(BlockTags.FULL_BLOCK)),
+    BERRY("Berry", (byte) 3, new CrossPlaneModel(), Set.of()),
+    COAL("Coal", (byte) 4, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    DIRT("Dirt", (byte) 5, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    GLASS("Glass", (byte) 6, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    GOLD("Gold", (byte) 7, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    LEAVES("Leaves", (byte) 8, new DefaultModelUniform(), Set.of()),
+    SAND("Sand", (byte) 9, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    STONE("Stone", (byte) 10, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK)),
+    WATER("Water", (byte) 10, new DefaultModelUniform(), Set.of()),
+    WOOD("Wood", (byte) 12, new DefaultModelUniform(), Set.of(BlockTags.FULL_BLOCK));
+
+    private static final Map<Byte, Block> NUMERIC_ID_MAP = new HashMap<>();
+
+    static {
+        for (Block block : values()) {
+            NUMERIC_ID_MAP.put(block.numericId, block);
+        }
+    }
+
+    private final String id;
+    private final byte numericId;
+    private final BlockModel model;
+    private final Set<BlockTags> tags;
+
+
+    Block(String id, byte numericId, BlockModel model, Set<BlockTags> tags) {
+        this.id = id;
+        this.numericId = numericId;
+        this.model = model;
+        this.tags = tags;
+    }
+
+    public static void create() {
+        for (Block type : values()) {
+            type.model.initialize(type.id);
+        }
+    }
+
+    public static void dispose() {
+        for (Block type : values()) {
+            type.model.dispose();
+        }
+    }
+
+    public static Block fromNumericId(byte numericId) {
+        return NUMERIC_ID_MAP.get(numericId);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public byte getNumericId() {
+        return numericId;
+    }
+
+    public BlockModel getModel() {
+        return model;
+    }
+
+    public boolean hasTag(BlockTags tag) {
+        return tags.contains(tag);
+    }
+}
