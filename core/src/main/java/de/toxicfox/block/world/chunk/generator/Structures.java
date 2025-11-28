@@ -75,4 +75,28 @@ public class Structures {
         }
     };
 
+    public static final Block[][][] wellStructure = {
+        {
+            {Block.LOG, Block.STONE, Block.LOG},
+            {Block.STONE, Block.WATER, Block.STONE},
+            {Block.LOG, Block.STONE, Block.LOG},
+        },
+        {
+            {Block.LOG, null, Block.LOG},
+            {null, null, null},
+            {Block.LOG, null, Block.LOG},
+        },
+        {
+            {Block.LOG, null, Block.LOG},
+            {null, null, null},
+            {Block.LOG, null, Block.LOG},
+        },
+        {
+            {Block.STONE, Block.STONE, Block.STONE},
+            {Block.STONE, Block.STONE, Block.STONE},
+            {Block.STONE, Block.STONE, Block.STONE},
+        },
+    };
+
+
 }

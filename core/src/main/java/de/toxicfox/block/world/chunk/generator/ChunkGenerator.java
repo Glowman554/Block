@@ -32,6 +32,7 @@ public class ChunkGenerator {
         generators.add(new ForrestGenerationStep(seeder.nextInt(), 0.6f));
         generators.add(new StructureGenerationStep(seeder.nextInt(), 2, Structures.treeStructure, 0.97f)); // Place trees outside a forrest
         generators.add(new StructureGenerationStep(seeder.nextInt(), 1, Structures.houseStructure, 0.99f));
+        generators.add(new StructureGenerationStep(seeder.nextInt(), 1, Structures.wellStructure, 0.99f));
     }
 
 

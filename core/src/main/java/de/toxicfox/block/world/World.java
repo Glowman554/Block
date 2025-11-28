@@ -171,26 +171,17 @@ public class World implements DebugOverlay.DataProvider {
         float tDeltaZ = stepZ / direction.z;
 
         int lastX = x, lastY = y, lastZ = z;
+        HitFace lastFace = null;
 
         for (int i = 0; i < 100; i++) {
             if (getBlock(x, y, z) != null) {
-                Vector3 hitPoint = start.cpy().add(direction.cpy().scl(Math.min(tMaxX, Math.min(tMaxY, tMaxZ))));
-                float localY = hitPoint.y - (float) Math.floor(hitPoint.y);
-                boolean hitUpper = localY > 0.5f;
-
 
                 if (block != null) {
                     if (block.hasTag(BlockTags.SLAB)) {
-                        if (getBlock(x, y, z) == block && getBlockData(x, y, z) != SlabModel.FULL) {
-                            setBlockData(x, y, z, SlabModel.FULL);
-                            return;
-                        } else {
-                            byte blockData = hitUpper ? SlabModel.UPPER : SlabModel.LOWER;
-                            setBlockData(lastX, lastY, lastZ, blockData);
-                        }
+                        doSlabPlacement(start, direction, tMaxX, tMaxY, tMaxZ, x, y, z, lastX, lastY, lastZ, block, lastFace);
+                    } else {
+                        setBlock(lastX, lastY, lastZ, block);
                     }
-
-                    setBlock(lastX, lastY, lastZ, block);
                 } else {
                     setBlock(x, y, z, null);
                 }
@@ -205,19 +196,47 @@ public class World implements DebugOverlay.DataProvider {
                 if (tMaxX < tMaxZ) {
                     x += stepX;
                     tMaxX += tDeltaX;
+                    lastFace = (stepX > 0) ? HitFace.WEST : HitFace.EAST;
                 } else {
                     z += stepZ;
                     tMaxZ += tDeltaZ;
+                    lastFace = (stepZ > 0) ? HitFace.NORTH : HitFace.SOUTH;
                 }
             } else {
                 if (tMaxY < tMaxZ) {
                     y += stepY;
                     tMaxY += tDeltaY;
+                    lastFace = (stepY > 0) ? HitFace.DOWN : HitFace.UP;
                 } else {
                     z += stepZ;
                     tMaxZ += tDeltaZ;
+                    lastFace = (stepZ > 0) ? HitFace.NORTH : HitFace.SOUTH;
                 }
             }
+
+        }
+    }
+
+    private void doSlabPlacement(Vector3 start, Vector3 direction, float tMaxX, float tMaxY, float tMaxZ, int x, int y, int z, int lastX, int lastY, int lastZ, Block block, HitFace lastFace) {
+        float tHit = Math.min(tMaxX, Math.min(tMaxY, tMaxZ));
+        Vector3 hitPoint = start.cpy().add(direction.cpy().scl(tHit));
+
+        byte placement;
+        if (lastFace == HitFace.UP) {
+            placement = SlabModel.LOWER;
+        } else if (lastFace == HitFace.DOWN) {
+            placement = SlabModel.UPPER;
+        } else {
+            float localY = hitPoint.y - (float) Math.floor(hitPoint.y);
+            placement = (localY > 0.5f) ? SlabModel.UPPER : SlabModel.LOWER;
+        }
+
+        byte other = getBlockData(x, y, z);
+        if (getBlock(x, y, z) == block && other != SlabModel.FULL && (other != placement || lastFace == HitFace.UP || lastFace == HitFace.DOWN)) {
+            setBlockData(x, y, z, SlabModel.FULL);
+        } else {
+            setBlockData(lastX, lastY, lastZ, placement);
+            setBlock(lastX, lastY, lastZ, block);
         }
     }
 
@@ -292,4 +311,6 @@ public class World implements DebugOverlay.DataProvider {
         r.text(String.format("Chunks loaded: %d", loadedChunks.size()), font);
         r.text(String.format("Seed: %d", seed), font);
     }
+
+    private enum HitFace {UP, DOWN, NORTH, SOUTH, EAST, WEST}
 }
