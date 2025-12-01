@@ -2,6 +2,7 @@ package de.toxicfox.block.world.chunk.generator.steps;
 
 import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.block.Block;
+import de.toxicfox.block.world.chunk.block.BlockData;
 import de.toxicfox.block.world.chunk.block.BlockTags;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 import de.toxicfox.block.world.chunk.generator.GenerationStep;
@@ -14,10 +15,10 @@ public class StructureGenerationStep implements GenerationStep {
 
     private final int generationSeed;
     private final int variation;
-    private final Block[][][] structure;
+    private final BlockData[][][] structure;
     private final float threshold;
 
-    public StructureGenerationStep(int generationSeed, int variation, Block[][][] structure, float threshold) {
+    public StructureGenerationStep(int generationSeed, int variation, BlockData[][][] structure, float threshold) {
         this.generationSeed = generationSeed;
         this.variation = variation;
         this.structure = structure;

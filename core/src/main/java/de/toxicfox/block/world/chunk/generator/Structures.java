@@ -1,101 +1,103 @@
 package de.toxicfox.block.world.chunk.generator;
 
 import de.toxicfox.block.world.chunk.block.Block;
+import de.toxicfox.block.world.chunk.block.BlockData;
+import de.toxicfox.block.world.chunk.block.models.SlabModel;
+import de.toxicfox.block.world.chunk.block.models.StairModel;
 
 public class Structures {
 
-    public static final Block[][][] treeStructure = {
+    public static final BlockData[][][] treeStructure = {
         {
             {null, null, null},
-            {null, Block.LOG, null},
-            {null, null, null},
-        },
-        {
-            {null, null, null},
-            {null, Block.LOG, null},
+            {null, new BlockData(Block.LOG), null},
             {null, null, null},
         },
         {
             {null, null, null},
-            {null, Block.LOG, null},
+            {null, new BlockData(Block.LOG), null},
             {null, null, null},
         },
         {
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
-            {Block.LEAVES, Block.LOG, Block.LEAVES},
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
+            {null, null, null},
+            {null, new BlockData(Block.LOG), null},
+            {null, null, null},
         },
         {
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LOG), new BlockData(Block.LEAVES)},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
         },
         {
-            {null, Block.LEAVES, null},
-            {Block.LEAVES, Block.LEAVES, Block.LEAVES},
-            {null, Block.LEAVES, null},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
+        },
+        {
+            {null, new BlockData(Block.LEAVES), null},
+            {new BlockData(Block.LEAVES), new BlockData(Block.LEAVES), new BlockData(Block.LEAVES)},
+            {null, new BlockData(Block.LEAVES), null},
+        },
+    };
+    public static final BlockData[][][] houseStructure = {
+        {
+            {new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONESTAIR, StairModel.WEST), new BlockData(Block.STONE), new BlockData(Block.STONE)},
+        },
+        {
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), null, new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+        },
+        {
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), new BlockData(Block.GLASS), new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.GLASS), null, null, null, new BlockData(Block.GLASS)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), null, new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+        },
+        {
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.WOOD), null, null, null, new BlockData(Block.WOOD)},
+            {new BlockData(Block.LOG), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.LOG)},
+        },
+        {
+            {new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.WOOD), new BlockData(Block.STONE)},
+            {new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE), new BlockData(Block.STONE)},
         }
     };
 
-    public static final Block[][][] houseStructure = {
+    public static final BlockData[][][] wellStructure = {
         {
-            {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE},
+            {new BlockData(Block.LOG), new BlockData(Block.STONE), new BlockData(Block.LOG)},
+            {new BlockData(Block.STONE), new BlockData(Block.WATER), new BlockData(Block.STONE)},
+            {new BlockData(Block.LOG), new BlockData(Block.STONE), new BlockData(Block.LOG)},
         },
         {
-            {Block.LOG, Block.WOOD, Block.WOOD, Block.WOOD, Block.LOG},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.LOG, Block.WOOD, null, Block.WOOD, Block.LOG},
+            {new BlockData(Block.LOG), null, new BlockData(Block.LOG)},
+            {null, null, null},
+            {new BlockData(Block.LOG), null, new BlockData(Block.LOG)},
         },
         {
-            {Block.LOG, Block.WOOD, Block.GLASS, Block.WOOD, Block.LOG},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.GLASS, null, null, null, Block.GLASS},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.LOG, Block.WOOD, null, Block.WOOD, Block.LOG},
+            {new BlockData(Block.LOG), null, new BlockData(Block.LOG)},
+            {null, null, null},
+            {new BlockData(Block.LOG), null, new BlockData(Block.LOG)},
         },
         {
-            {Block.LOG, Block.WOOD, Block.WOOD, Block.WOOD, Block.LOG},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.WOOD, null, null, null, Block.WOOD},
-            {Block.LOG, Block.WOOD, Block.WOOD, Block.WOOD, Block.LOG},
-        },
-        {
-            {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.WOOD, Block.WOOD, Block.WOOD, Block.STONE},
-            {Block.STONE, Block.STONE, Block.STONE, Block.STONE, Block.STONE},
+            {new BlockData(Block.STONESLAB, SlabModel.LOWER), new BlockData(Block.STONESLAB, SlabModel.LOWER), new BlockData(Block.STONESLAB, SlabModel.LOWER)},
+            {new BlockData(Block.STONESLAB, SlabModel.LOWER), new BlockData(Block.STONE), new BlockData(Block.STONESLAB, SlabModel.LOWER)},
+            {new BlockData(Block.STONESLAB, SlabModel.LOWER), new BlockData(Block.STONESLAB, SlabModel.LOWER), new BlockData(Block.STONESLAB, SlabModel.LOWER)},
         }
-    };
-
-    public static final Block[][][] wellStructure = {
-        {
-            {Block.LOG, Block.STONE, Block.LOG},
-            {Block.STONE, Block.WATER, Block.STONE},
-            {Block.LOG, Block.STONE, Block.LOG},
-        },
-        {
-            {Block.LOG, null, Block.LOG},
-            {null, null, null},
-            {Block.LOG, null, Block.LOG},
-        },
-        {
-            {Block.LOG, null, Block.LOG},
-            {null, null, null},
-            {Block.LOG, null, Block.LOG},
-        },
-        {
-            {Block.STONE, Block.STONE, Block.STONE},
-            {Block.STONE, Block.STONE, Block.STONE},
-            {Block.STONE, Block.STONE, Block.STONE},
-        },
     };
 
 
