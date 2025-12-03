@@ -19,7 +19,7 @@ public class WorldStore {
             worldDirectory.mkdirs();
         }
 
-        chunkStore = new ChunkStore(new File(worldDirectory, "chunks"), persistWorld);
+        chunkStore = new ChunkStore(new File(worldDirectory, "chunks.db"), persistWorld);
     }
 
     public long loadOrGenerateWorldSeed() {

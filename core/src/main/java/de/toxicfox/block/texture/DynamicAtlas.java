@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.FloatAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 
 public class DynamicAtlas {
-    public static final DynamicAtlas BLOCK_ATLAS = new DynamicAtlas(20, 6 * 6);
+    public static final DynamicAtlas BLOCK_ATLAS = new DynamicAtlas(20, 7 * 7);
 
     private final int tileSize;
     private final int tilesX;

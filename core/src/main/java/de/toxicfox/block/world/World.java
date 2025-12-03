@@ -10,9 +10,11 @@ import de.toxicfox.block.world.chunk.Chunk;
 import de.toxicfox.block.world.chunk.block.Block;
 import de.toxicfox.block.world.chunk.block.BlockTags;
 import de.toxicfox.block.world.chunk.block.models.SlabModel;
+import de.toxicfox.block.world.chunk.block.models.StairModel;
 import de.toxicfox.block.world.chunk.generator.ChunkGenerator;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class World implements DebugOverlay.DataProvider {
 
@@ -170,6 +172,8 @@ public class World implements DebugOverlay.DataProvider {
         float tDeltaY = stepY / direction.y;
         float tDeltaZ = stepZ / direction.z;
 
+        Direction dir = getDirectionFromVector(direction);
+
         int lastX = x, lastY = y, lastZ = z;
         HitFace lastFace = null;
 
@@ -179,6 +183,8 @@ public class World implements DebugOverlay.DataProvider {
                 if (block != null) {
                     if (block.hasTag(BlockTags.SLAB)) {
                         doSlabPlacement(start, direction, tMaxX, tMaxY, tMaxZ, x, y, z, lastX, lastY, lastZ, block, lastFace);
+                    } else if (block.hasTag(BlockTags.STAIR)) {
+                        doStairPlacement(lastX, lastY, lastZ, block, dir);
                     } else {
                         setBlock(lastX, lastY, lastZ, block);
                     }
@@ -217,6 +223,7 @@ public class World implements DebugOverlay.DataProvider {
         }
     }
 
+
     private void doSlabPlacement(Vector3 start, Vector3 direction, float tMaxX, float tMaxY, float tMaxZ, int x, int y, int z, int lastX, int lastY, int lastZ, Block block, HitFace lastFace) {
         float tHit = Math.min(tMaxX, Math.min(tMaxY, tMaxZ));
         Vector3 hitPoint = start.cpy().add(direction.cpy().scl(tHit));
@@ -239,6 +246,40 @@ public class World implements DebugOverlay.DataProvider {
             setBlock(lastX, lastY, lastZ, block);
         }
     }
+
+    private void doStairPlacement(int lastX, int lastY, int lastZ, Block block, Direction dir) {
+        byte placement = switch (dir) {
+            case NORTH -> StairModel.NORTH;
+            case EAST -> StairModel.EAST;
+            case SOUTH -> StairModel.SOUTH;
+            case WEST -> StairModel.WEST;
+        };
+
+        setBlockData(lastX, lastY, lastZ, placement);
+        setBlock(lastX, lastY, lastZ, block);
+    }
+
+
+    private Direction getDirectionFromVector(Vector3 dir) {
+        Vector3 horizontal = new Vector3(dir.x, 0, dir.z).nor();
+
+        float angle = (float)Math.toDegrees(Math.atan2(horizontal.z, horizontal.x));
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        if (angle >= 45 && angle < 135) {
+            return Direction.NORTH;
+        } else if (angle >= 135 && angle < 225) {
+            return Direction.WEST;
+        } else if (angle >= 225 && angle < 315) {
+            return Direction.SOUTH;
+        } else {
+            return Direction.EAST;
+        }
+    }
+
 
     private float intBound(float s, float ds) {
         if (ds == 0) {
@@ -313,4 +354,5 @@ public class World implements DebugOverlay.DataProvider {
     }
 
     private enum HitFace {UP, DOWN, NORTH, SOUTH, EAST, WEST}
+    public enum Direction {NORTH, SOUTH, EAST, WEST;}
 }
