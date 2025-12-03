@@ -232,7 +232,7 @@ public class World implements DebugOverlay.DataProvider {
         }
 
         byte other = getBlockData(x, y, z);
-        if (getBlock(x, y, z) == block && other != SlabModel.FULL && (other != placement || lastFace == HitFace.UP || lastFace == HitFace.DOWN)) {
+        if (getBlock(x, y, z) == block && (lastFace == HitFace.UP && other == SlabModel.LOWER) || (lastFace == HitFace.DOWN && other == SlabModel.UPPER)) {
             setBlockData(x, y, z, SlabModel.FULL);
         } else {
             setBlockData(lastX, lastY, lastZ, placement);
